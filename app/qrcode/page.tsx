@@ -76,8 +76,8 @@ function QRCodeCanvas({ tableNumber, baseUrl }: { tableNumber: string; baseUrl: 
 }
 
 export default function QRCodeGeneratorPage() {
-  const [baseUrl, setBaseUrl] = useState("https://votre-site.vercel.app")
-  const [tableCount, setTableCount] = useState(10)
+  const [baseUrl, setBaseUrl] = useState("https://templelate-restaurant.vercel.app")
+  const [tableCount, setTableCount] = useState(15)
 
   return (
     <div className="container mx-auto py-10 max-w-4xl">
