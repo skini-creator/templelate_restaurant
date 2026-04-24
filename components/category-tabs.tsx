@@ -12,9 +12,9 @@ export function CategoryTabs({ activeId, onChange }: CategoryTabsProps) {
   return (
     <nav
       aria-label="Catégories du menu"
-      className="sticky top-[96px] z-30 bg-background/95 backdrop-blur-md"
+      className="sticky top-[96px] z-30 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800/50"
     >
-      <ul className="no-scrollbar flex gap-6 overflow-x-auto px-5 border-b border-border">
+      <ul className="no-scrollbar flex gap-3 overflow-x-auto px-5 py-4">
         {CATEGORIES.map((cat) => {
           const isActive = cat.id === activeId
           return (
@@ -32,20 +32,14 @@ export function CategoryTabs({ activeId, onChange }: CategoryTabsProps) {
                 }}
                 aria-pressed={isActive}
                 className={cn(
-                  "relative whitespace-nowrap py-3 text-sm font-medium transition-colors",
+                  "relative whitespace-nowrap px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-full",
                   isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground",
+                    ? "text-white bg-gradient-to-r from-orange-500 to-red-600 shadow-lg shadow-orange-900/30"
+                    : "text-zinc-400 bg-zinc-900/50 hover:text-white hover:bg-zinc-800/50 border border-zinc-800/50",
                 )}
               >
+                <span className="mr-2">{cat.emoji}</span>
                 {cat.name}
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "absolute inset-x-0 -bottom-px h-0.5 rounded-full transition-all",
-                    isActive ? "bg-primary" : "bg-transparent",
-                  )}
-                />
               </button>
             </li>
           )

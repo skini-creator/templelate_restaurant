@@ -13,7 +13,7 @@ export default async function HomePage({ searchParams }: PageProps) {
 
   return (
     <CartProvider>
-      <div className="min-h-dvh bg-background">
+      <div className="min-h-dvh bg-zinc-950">
         <Navbar tableNumber={tableNumber} />
 
         <main className="mx-auto max-w-5xl">

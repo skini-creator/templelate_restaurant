@@ -44,23 +44,23 @@ export function CartSheet({ tableNumber }: CartSheetProps) {
           type="button"
           aria-label={`Ouvrir le panier (${totalItems} article${totalItems > 1 ? "s" : ""})`}
           className={cn(
-            "fixed bottom-6 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl ring-4 ring-background transition hover:scale-105 active:scale-95",
+            "fixed bottom-6 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-xl shadow-orange-900/40 ring-4 ring-zinc-950 transition hover:scale-105 active:scale-95",
             bounce && "cart-bounce",
           )}
         >
           <ShoppingBag className="h-6 w-6" aria-hidden="true" />
           {totalItems > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground ring-2 ring-background tabular-nums">
+            <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-white text-orange-600 px-1.5 text-xs font-bold ring-2 ring-zinc-950 tabular-nums">
               {totalItems}
             </span>
           )}
         </button>
       </SheetTrigger>
 
-      <SheetContent side="bottom" className="h-[90vh] rounded-t-3xl p-0 flex flex-col">
-        <SheetHeader className="px-5 pt-5 pb-3 border-b border-border">
-          <SheetTitle className="text-xl">Votre panier</SheetTitle>
-          <SheetDescription>
+      <SheetContent side="bottom" className="h-[90vh] rounded-t-3xl p-0 flex flex-col bg-zinc-950 border-t border-zinc-800">
+        <SheetHeader className="px-5 pt-5 pb-3 border-b border-zinc-800">
+          <SheetTitle className="text-xl text-white">Votre panier</SheetTitle>
+          <SheetDescription className="text-zinc-400">
             {totalItems === 0
               ? "Ajoutez vos plats préférés pour commencer."
               : `${totalItems} article${totalItems > 1 ? "s" : ""} · ${formatFCFA(totalPrice)}`}
@@ -82,42 +82,42 @@ export function CartSheet({ tableNumber }: CartSheetProps) {
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt=""
-                    className="h-16 w-16 shrink-0 rounded-xl object-cover bg-secondary"
+                    className="h-16 w-16 shrink-0 rounded-xl object-cover bg-zinc-800"
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="truncate text-sm font-bold">{product.name}</h3>
-                    <p className="text-xs text-muted-foreground">{formatFCFA(product.price)}</p>
-                    <div className="mt-2 flex items-center gap-1 w-fit rounded-full bg-secondary p-1">
+                    <h3 className="truncate text-sm font-bold text-white">{product.name}</h3>
+                    <p className="text-xs text-zinc-500">{formatFCFA(product.price)}</p>
+                    <div className="mt-2 flex items-center gap-1 w-fit rounded-full bg-zinc-900 border border-zinc-800 p-1">
                       <button
                         type="button"
                         onClick={() => decrement(product.id)}
                         aria-label={`Retirer un ${product.name}`}
-                        className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-background active:scale-95"
+                        className="flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 active:scale-95"
                       >
                         <Minus className="h-3.5 w-3.5" aria-hidden="true" />
                       </button>
-                      <span className="min-w-6 text-center text-sm font-bold tabular-nums">
+                      <span className="min-w-6 text-center text-sm font-bold tabular-nums text-white">
                         {quantity}
                       </span>
                       <button
                         type="button"
                         onClick={() => add(product)}
                         aria-label={`Ajouter un ${product.name}`}
-                        className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-background active:scale-95"
+                        className="flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 active:scale-95"
                       >
                         <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                       </button>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <span className="text-sm font-bold tabular-nums">
+                    <span className="text-sm font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent tabular-nums">
                       {formatFCFA(product.price * quantity)}
                     </span>
                     <button
                       type="button"
                       onClick={() => remove(product.id)}
                       aria-label={`Supprimer ${product.name}`}
-                      className="text-muted-foreground hover:text-destructive transition-colors"
+                      className="text-zinc-600 hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </button>
@@ -130,17 +130,19 @@ export function CartSheet({ tableNumber }: CartSheetProps) {
 
         {/* Footer : total + commander */}
         {items.length > 0 && (
-          <SheetFooter className="flex-col gap-3 border-t border-border bg-background px-5 py-4">
+          <SheetFooter className="flex-col gap-3 border-t border-zinc-800 bg-zinc-950 px-5 py-4">
             <div className="flex items-baseline justify-between">
-              <span className="text-sm text-muted-foreground">Total</span>
-              <span className="text-2xl font-bold tabular-nums">{formatFCFA(totalPrice)}</span>
+              <span className="text-sm text-zinc-400">Total</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent tabular-nums">
+                {formatFCFA(totalPrice)}
+              </span>
             </div>
 
             <a
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:brightness-95 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-orange-900/30 transition hover:brightness-110 active:scale-[0.98]"
             >
               <WhatsappIcon className="h-5 w-5" />
               Commander sur WhatsApp
@@ -149,7 +151,7 @@ export function CartSheet({ tableNumber }: CartSheetProps) {
             <button
               type="button"
               onClick={clear}
-              className="w-full text-xs font-medium text-muted-foreground hover:text-destructive transition-colors"
+              className="w-full text-xs font-medium text-zinc-600 hover:text-red-500 transition-colors"
             >
               Vider le panier
             </button>
@@ -163,11 +165,11 @@ export function CartSheet({ tableNumber }: CartSheetProps) {
 function EmptyCart() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
-        <ShoppingBag className="h-7 w-7 text-muted-foreground" aria-hidden="true" />
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-900 border border-zinc-800">
+        <ShoppingBag className="h-7 w-7 text-zinc-500" aria-hidden="true" />
       </div>
-      <h3 className="text-base font-bold">Votre panier est vide</h3>
-      <p className="max-w-xs text-sm text-muted-foreground text-pretty">
+      <h3 className="text-base font-bold text-white">Votre panier est vide</h3>
+      <p className="max-w-xs text-sm text-zinc-500 text-pretty">
         Parcourez notre menu et ajoutez vos plats préférés pour passer commande.
       </p>
     </div>

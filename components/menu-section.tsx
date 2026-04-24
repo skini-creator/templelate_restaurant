@@ -36,7 +36,8 @@ export function MenuSection() {
     <>
       <CategoryTabs activeId={activeId} onChange={setActiveId} />
 
-      <div className="pb-40 pt-2">
+      {/* Fond sombre avec dégradé */}
+      <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-black pb-40 pt-4">
         {CATEGORIES.map((cat) => {
           const products = getProductsByCategory(cat.id)
           if (products.length === 0) return null
@@ -50,23 +51,29 @@ export function MenuSection() {
                 sectionsRef.current[cat.id] = el
               }}
               aria-labelledby={`title-${cat.id}`}
-              className="scroll-mt-40 pt-8"
+              className="scroll-mt-40 pt-6 mb-8"
             >
-              <div className="px-5">
-                <h2
-                  id={`title-${cat.id}`}
-                  className={`font-serif text-2xl font-semibold tracking-tight ${
-                    isOffers ? "text-primary" : "text-foreground"
-                  }`}
-                >
-                  {cat.name}
-                </h2>
-                <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-muted-foreground text-pretty">
+              <div className="px-5 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{cat.emoji}</span>
+                  <h2
+                    id={`title-${cat.id}`}
+                    className={`font-serif text-2xl font-bold tracking-tight ${
+                      isOffers
+                        ? "bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent"
+                        : "text-white"
+                    }`}
+                  >
+                    {cat.name}
+                  </h2>
+                </div>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-zinc-500 text-pretty">
                   {cat.description}
                 </p>
               </div>
 
-              <div className="no-scrollbar mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-2">
+              {/* Scroll horizontal moderne */}
+              <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
