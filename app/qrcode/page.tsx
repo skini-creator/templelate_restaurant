@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { QrCode } from "lucide-react"
+import { QRCodeSVG } from 'qrcode.react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,106 +10,77 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function QRCodeCanvas({ tableNumber, baseUrl }: { tableNumber: string; baseUrl: string }) {
+  // Construction de l'URL finale pour la table
   const url = `${baseUrl}?table=${tableNumber}`
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* QR Code SVG généré */}
-      <div className="bg-white p-4 rounded-2xl border-2 border-border shadow-sm">
-        <svg
-          viewBox="0 0 200 200"
-          className="w-48 h-48"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Code QR simplifié - version SVG */}
-          <rect fill="#000" width="200" height="200" />
-          <rect fill="#fff" x="10" y="10" width="180" height="180" />
-          
-          {/* Coins de positionnement */}
-          <rect fill="#000" x="20" y="20" width="50" height="50" />
-          <rect fill="#fff" x="28" y="28" width="34" height="34" />
-          <rect fill="#000" x="34" y="34" width="22" height="22" />
-          
-          <rect fill="#000" x="130" y="20" width="50" height="50" />
-          <rect fill="#fff" x="138" y="28" width="34" height="34" />
-          <rect fill="#000" x="144" y="34" width="22" height="22" />
-          
-          <rect fill="#000" x="20" y="130" width="50" height="50" />
-          <rect fill="#fff" x="28" y="138" width="34" height="34" />
-          <rect fill="#000" x="34" y="144" width="22" height="22" />
-          
-          {/* Données du tableau (pattern simplifié) */}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <rect key={`r${i}`} fill="#000" x={80 + (i % 4) * 15} y={20 + Math.floor(i / 4) * 80} width="15" height="15" />
-          ))}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <rect key={`b${i}`} fill="#000" x={20 + (i % 4) * 15} y={80 + Math.floor(i / 4) * 15} width="15" height="15" />
-          ))}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <rect key={`m${i}`} fill="#000" x={80 + (i % 4) * 15} y={80 + Math.floor(i / 4) * 15} width="15" height="15" />
-          ))}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <rect key={`d${i}`} fill="#000" x={130 + (i % 4) * 15} y={80 + Math.floor(i / 4) * 15} width="15" height="15" />
-          ))}
-          
-          {/* Numéro de table au centre */}
-          <rect fill="#000" x="85" y="85" width="30" height="30" />
-          <text x="100" y="105" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="bold" fontFamily="sans-serif">
-            {tableNumber}
-          </text>
-        </svg>
+      {/* Vrai QR Code scannable */}
+      <div className="bg-white p-4 rounded-2xl border-2 border-border shadow-sm flex items-center justify-center">
+        <QRCodeSVG 
+          value={url}
+          size={180}
+          level={"H"} // Haute tolérance aux erreurs pour l'impression
+          includeMargin={false}
+        />
       </div>
       
-      <p className="text-sm text-muted-foreground text-center">
-        Scannez pour commander depuis la table {tableNumber}
-      </p>
+      <div className="text-center">
+        <p className="text-sm font-bold uppercase tracking-wider">
+          Table {tableNumber}
+        </p>
+        <p className="text-[10px] text-muted-foreground truncate max-w-[140px] mt-1">
+          {url}
+        </p>
+      </div>
       
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs text-primary hover:underline"
+      <Button 
+        variant="ghost" 
+        size="sm" 
+        className="text-[10px] h-7"
+        onClick={() => window.open(url, '_blank')}
       >
-        {url}
-      </a>
+        Tester le lien
+      </Button>
     </div>
   )
 }
 
 export default function QRCodeGeneratorPage() {
+  // L'URL de base de ton projet Vercel
   const [baseUrl, setBaseUrl] = useState("https://templelate-restaurant.vercel.app")
   const [tableCount, setTableCount] = useState(15)
 
   return (
-    <div className="container mx-auto py-10 max-w-4xl">
+    <div className="container mx-auto py-10 max-w-5xl px-4">
       <div className="flex items-center gap-3 mb-8">
         <div className="p-3 rounded-xl bg-primary/10">
           <QrCode className="h-8 w-8 text-primary" />
         </div>
         <div>
           <h1 className="text-3xl font-bold">Générateur de QR Codes</h1>
-          <p className="text-muted-foreground">Créez des QR codes pour vos tables</p>
+          <p className="text-muted-foreground">Outil de déploiement pour restaurants (Gabon)</p>
         </div>
       </div>
 
       <Tabs defaultValue="generator" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="generator">Générateur</TabsTrigger>
-          <TabsTrigger value="settings">Paramètres</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsTrigger value="generator">Visualiser les QR Codes</TabsTrigger>
+          <TabsTrigger value="settings">Configuration & Impression</TabsTrigger>
         </TabsList>
 
         <TabsContent value="generator" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Générer des QR codes</CardTitle>
+              <CardTitle>Grille des Tables</CardTitle>
               <CardDescription>
-                Imprimez ces QR codes et placez-les sur vos tables
+                Vérifiez que chaque QR code pointe vers la bonne table avant d'imprimer.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {Array.from({ length: tableCount }, (_, i) => i + 1).map((table) => (
-                  <div key={table} className="flex flex-col items-center p-4 border rounded-xl bg-card">
+                  <div key={table} className="flex flex-col items-center p-6 border rounded-2xl bg-card hover:border-primary/50 transition-colors">
                     <QRCodeCanvas tableNumber={String(table)} baseUrl={baseUrl} />
                   </div>
                 ))}
@@ -120,40 +92,45 @@ export default function QRCodeGeneratorPage() {
         <TabsContent value="settings" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Configuration</CardTitle>
+              <CardTitle>Paramètres de l'établissement</CardTitle>
               <CardDescription>
-                Définissez l&apos;URL de votre site et le nombre de tables
+                Configurez l'URL de production et le nombre de tables du client.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="baseUrl">URL du site</Label>
+                <Label htmlFor="baseUrl">URL de destination (Vercel)</Label>
                 <Input
                   id="baseUrl"
                   value={baseUrl}
                   onChange={(e) => setBaseUrl(e.target.value)}
-                  placeholder="https://votre-site.vercel.app"
+                  placeholder="https://votre-projet.vercel.app"
                 />
-                <p className="text-xs text-muted-foreground">
-                  L&apos;URL où votre site est hébergé (Vercel, Netlify, etc.)
+                <p className="text-[12px] text-yellow-600 bg-yellow-50 p-2 rounded">
+                  ⚠️ Assurez-vous que l'URL ne finit pas par un "/"
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tableCount">Nombre de tables</Label>
+                <Label htmlFor="tableCount">Nombre de tables à générer</Label>
                 <Input
                   id="tableCount"
                   type="number"
                   min="1"
-                  max="50"
+                  max="100"
                   value={tableCount}
                   onChange={(e) => setTableCount(Number(e.target.value))}
                 />
               </div>
 
-              <Button onClick={() => window.print()}>
-                Imprimer tous les QR codes
-              </Button>
+              <div className="pt-4 border-t">
+                <Button className="w-full md:w-auto" onClick={() => window.print()}>
+                  Lancer l'impression (PDF)
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Astuce : Utilisez "Enregistrer au format PDF" pour envoyer le fichier à l'imprimeur.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
